@@ -1,22 +1,26 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// Tự động xác định môi trường
+// Kiểm tra nếu đang build production
 const isProd = process.env.NODE_ENV === 'production';
 
 export default defineConfig({
-  base: isProd ? '/todoist-clone/' : '/', // 👈 tên repo trên GitHub khi deploy
+  base: isProd ? '/todoist-clone/' : '/', // 👈 Tên repo của bạn trên GitHub
   plugins: [react()],
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8080', // 👉 dùng khi chạy local
-        changeOrigin: true
+        target: 'http://localhost:8080', // 👉 Local backend khi dev
+        changeOrigin: true,
+        secure: false
       }
     }
   },
+  build: {
+    outDir: 'dist', // Mặc định
+    emptyOutDir: true
+  },
   define: {
-    // 👇 Cho phép bạn dùng biến môi trường nếu cần
     'process.env': process.env
   }
 });

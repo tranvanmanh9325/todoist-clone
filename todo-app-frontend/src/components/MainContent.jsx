@@ -76,6 +76,9 @@ const MainContent = () => {
 
   const activeTasks = tasks.filter((t) => !t.completed);
 
+  // ✅ Lấy ảnh đúng khi deploy trên GitHub Pages
+  const sparkleImgUrl = `${import.meta.env.BASE_URL}assets/sparkle.png`;
+
   return (
     <div className="main-content">
       <header className="main-header">
@@ -84,7 +87,7 @@ const MainContent = () => {
 
       {!showForm && activeTasks.length === 0 ? (
         <div className="welcome">
-          <img src="/assets/sparkle.png" alt="Welcome" className="welcome-img" />
+          <img src={sparkleImgUrl} alt="Welcome" className="welcome-img" />
           <h2>Capture now, plan later</h2>
           <p>
             Inbox is your go-to spot for quick task entry. Clear your mind now,
