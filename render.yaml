@@ -1,15 +1,16 @@
 services:
   - type: web
     name: todo-backend
-    runtime: docker                       # ✅ Bạn đang dùng Dockerfile
+    runtime: docker             # vì bạn dùng Dockerfile
     plan: free
-    rootDir: todo-app-backend
+    rootDir: todo-app-backend   # thư mục chứa Dockerfile
+
     autoDeploy: true
 
     envVars:
-      # 👉 PostgreSQL connection
+      # 👉 PostgreSQL (internal database)
       - key: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://dpg-d1uhf1adbo4c73ejtf80-a:5432/todo_db_ml5v
+        value: jdbc:postgresql://dpg-d1uhf1adbo4c73ejtf80-a.internal:5432/todo_db_ml5v
       - key: SPRING_DATASOURCE_USERNAME
         value: todo_user
       - key: SPRING_DATASOURCE_PASSWORD
@@ -23,16 +24,16 @@ services:
       - key: SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL
         value: "true"
 
-      # 👉 SQL logs
+      # 👉 SQL Logs (debug)
       - key: LOGGING_LEVEL_ORG_HIBERNATE_SQL
         value: DEBUG
       - key: LOGGING_LEVEL_ORG_HIBERNATE_TYPE_DESCRIPTOR_SQL_BASICBINDER
         value: TRACE
 
-      # 👉 CORS — chỉ cho phép GitHub Pages frontend
+      # 👉 CORS cho GitHub Pages (React Vite)
       - key: SPRING_WEB_CORS_ALLOWED_ORIGINS
         value: https://tranvanmanh9325.github.io
 
-      # 👉 Port (Render sẽ inject, nhưng tốt nhất đặt default)
+      # 👉 Server port
       - key: PORT
         value: "8080"

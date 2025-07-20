@@ -1,29 +1,31 @@
-# ✅ Stage 1: Build ứng dụng với Maven
+# ✅ Stage 1: Build ứng dụng với Maven (JDK 21 + Maven)
 FROM maven:3.9.6-eclipse-temurin-21 AS build
 
 # Tạo thư mục làm việc trong container
 WORKDIR /app
 
-# Copy toàn bộ project (bao gồm pom.xml, src/, mvnw...)
+# Copy toàn bộ project
 COPY . .
 
-# Cấp quyền chạy cho mvnw nếu có
+# Đảm bảo quyền thực thi cho mvnw (nếu có)
 RUN chmod +x mvnw
 
-# Build project, tạo file .jar trong target/
-RUN ./mvnw clean package -DskipTests
+# Dùng wrapper nếu có, fallback sang Maven nếu không
+RUN ./mvnw clean package -DskipTests || mvn clean package -DskipTests
 
-# ✅ Stage 2: Runtime container chỉ chứa JDK (nhẹ hơn)
+# ✅ Stage 2: Runtime chỉ chứa JDK (JRE đủ cho Spring Boot)
 FROM eclipse-temurin:21-jdk
 
 WORKDIR /app
 
-# Copy file jar từ stage build vào runtime
+# Copy file .jar từ stage build
 COPY --from=build /app/target/*.jar app.jar
 
-# Render sẽ inject biến môi trường PORT, mặc định là 10000+
+# Expose port (Render sẽ tự inject env PORT)
 EXPOSE 8080
+
+# ✅ Cho phép override PORT từ Render
 ENV PORT=8080
 
-# ✅ Chạy ứng dụng Spring Boot
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# ✅ Entrypoint Spring Boot
+ENTRYPOINT ["java", "-Dserver.port=${PORT}", "-jar", "app.jar"]
