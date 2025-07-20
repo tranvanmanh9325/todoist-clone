@@ -1,15 +1,13 @@
 services:
   - type: web
     name: todo-backend
-    env: java
+    runtime: docker                       # ✅ Bạn đang dùng Dockerfile
     plan: free
     rootDir: todo-app-backend
-    buildCommand: ./mvnw clean install
-    startCommand: java -jar target/*.jar
     autoDeploy: true
 
     envVars:
-      # 👉 PostgreSQL config
+      # 👉 PostgreSQL connection
       - key: SPRING_DATASOURCE_URL
         value: jdbc:postgresql://dpg-d1uhf1adbo4c73ejtf80-a:5432/todo_db_ml5v
       - key: SPRING_DATASOURCE_USERNAME
@@ -17,7 +15,7 @@ services:
       - key: SPRING_DATASOURCE_PASSWORD
         value: nY9J0wJDNz0ZFdmiO1T89SPMGVkjTdea
 
-      # 👉 Hibernate config
+      # 👉 Hibernate
       - key: SPRING_JPA_HIBERNATE_DDL_AUTO
         value: update
       - key: SPRING_JPA_SHOW_SQL
@@ -31,10 +29,10 @@ services:
       - key: LOGGING_LEVEL_ORG_HIBERNATE_TYPE_DESCRIPTOR_SQL_BASICBINDER
         value: TRACE
 
-      # 👉 CORS
+      # 👉 CORS — chỉ cho phép GitHub Pages frontend
       - key: SPRING_WEB_CORS_ALLOWED_ORIGINS
-        value: http://localhost:5173,https://tranvanmanh9325.github.io
+        value: https://tranvanmanh9325.github.io
 
-      # 👉 Other
+      # 👉 Port (Render sẽ inject, nhưng tốt nhất đặt default)
       - key: PORT
         value: "8080"
