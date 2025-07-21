@@ -4,32 +4,35 @@ services:
     runtime: docker
     plan: free
     rootDir: todo-app-backend
+
     autoDeploy: true
 
     envVars:
       - key: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://dpg-d1uhf1adbo4c73ejtf80-a:5432/todo_db_ml5v
+        value: jdbc:postgresql://dpg-d1uhf1adbo4c73ejtf80-a.singapore-postgres.render.com:5432/todo_db_ml5v
       - key: SPRING_DATASOURCE_USERNAME
         value: todo_user
       - key: SPRING_DATASOURCE_PASSWORD
         value: nY9J0wJDNz0ZFdmiO1T89SPMGVkjTdea
 
+      # Hibernate
       - key: SPRING_JPA_HIBERNATE_DDL_AUTO
         value: update
       - key: SPRING_JPA_SHOW_SQL
         value: "true"
       - key: SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL
         value: "true"
-      - key: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT
-        value: org.hibernate.dialect.PostgreSQLDialect
 
+      # SQL debug log
       - key: LOGGING_LEVEL_ORG_HIBERNATE_SQL
         value: DEBUG
       - key: LOGGING_LEVEL_ORG_HIBERNATE_TYPE_DESCRIPTOR_SQL_BASICBINDER
         value: TRACE
 
+      # CORS GitHub Pages
       - key: SPRING_WEB_CORS_ALLOWED_ORIGINS
-        value: https://tranvanmanh9325.github.io,http://localhost:5173
+        value: https://tranvanmanh9325.github.io
 
+      # Port
       - key: PORT
         value: "8080"
