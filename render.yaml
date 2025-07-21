@@ -1,38 +1,35 @@
 services:
   - type: web
     name: todo-backend
-    runtime: docker                     # ✅ Chạy bằng Dockerfile
+    runtime: docker
     plan: free
-    rootDir: todo-app-backend          # ✅ Thư mục chứa Dockerfile
+    rootDir: todo-app-backend
     autoDeploy: true
 
     envVars:
-      # ✅ Kết nối đến internal PostgreSQL của Render
       - key: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://dpg-d1uhf1adbo4c73ejtf80-a.internal:5432/todo_db_ml5v
+        value: jdbc:postgresql://dpg-d1uhf1adbo4c73ejtf80-a:5432/todo_db_ml5v
       - key: SPRING_DATASOURCE_USERNAME
         value: todo_user
       - key: SPRING_DATASOURCE_PASSWORD
         value: nY9J0wJDNz0ZFdmiO1T89SPMGVkjTdea
 
-      # ✅ Cấu hình Hibernate
       - key: SPRING_JPA_HIBERNATE_DDL_AUTO
         value: update
       - key: SPRING_JPA_SHOW_SQL
         value: "true"
       - key: SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL
         value: "true"
+      - key: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT
+        value: org.hibernate.dialect.PostgreSQLDialect
 
-      # ✅ Bật log query & tham số binding
       - key: LOGGING_LEVEL_ORG_HIBERNATE_SQL
         value: DEBUG
       - key: LOGGING_LEVEL_ORG_HIBERNATE_TYPE_DESCRIPTOR_SQL_BASICBINDER
         value: TRACE
 
-      # ✅ CORS – cho phép GitHub Pages và localhost
       - key: SPRING_WEB_CORS_ALLOWED_ORIGINS
         value: https://tranvanmanh9325.github.io,http://localhost:5173
 
-      # ✅ PORT – Render inject nhưng nên đặt mặc định
       - key: PORT
         value: "8080"
